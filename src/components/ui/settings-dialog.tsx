@@ -1,6 +1,6 @@
 import React, {useState} from "react";
 import {Button} from "@/components/ui/button";
-import {ScanEye, Shield, ShieldCheck, ShieldX} from "lucide-react";
+import {ScanEye, ShieldCheck, ShieldX} from "lucide-react";
 import {
     Dialog,
     DialogContent,
@@ -10,7 +10,6 @@ import {
     DialogTrigger,
     DialogFooter,
 } from "@/components/ui/dialog";
-import {Switch} from "@/components/ui/switch";
 import {
     AlertDialog,
     AlertDialogContent,
@@ -21,11 +20,13 @@ import {
     AlertDialogAction
 } from "@/components/ui/alert-dialog";
 import CameraView from "@/components/ui/camera-view";
+import {useToast} from "@/components/ui/use-toast";
 
 export default function SettingsDialog() {
     const [isFaceAuthEnabled, setIsFaceAuthEnabled] = useState(false);
     const [isAlertOpen, setIsAlertOpen] = useState(false);
     const [isCameraOpen, setIsCameraOpen] = useState(false);
+    const {toast} = useToast()
 
     const handleFaceAuthToggle = (checked: boolean) => {
         if (checked) {
@@ -58,7 +59,7 @@ export default function SettingsDialog() {
                 <DialogHeader>
                     <DialogTitle>Toggle face verification</DialogTitle>
                     <DialogDescription>
-                        Enable or disable face authentication for your account.
+                        Register a picture of your face for authentication purposes.
                     </DialogDescription>
                 </DialogHeader>
                 <div className="mt-4">
@@ -86,14 +87,21 @@ export default function SettingsDialog() {
                     <div>
                         <h3 className="text-lg font-semibold">Camera View</h3>
                         <div className="bg-gray-100 p-4">
-                            <CameraView width={500} height={300}/>
-                        </div>
-                        <div className="flex justify-center">
-                            <Button onClick={event => {
-                                console.log('Take picture');
-                            }} className="mt-4">
-                                Take picture
-                            </Button>
+                            <CameraView width={500} height={500} onRegisterSuccess={() => {
+                                handleCameraClose();
+                                toast({
+                                    title: "Image registered",
+                                    description: "Your face has been successfully registered for authentication.",
+                                    duration: 3000, variant: "success"
+                                })
+                            }}
+                                        onRegisterFailure={() => {
+                                            toast({
+                                                title: "Failed image registration",
+                                                description: "No face detected in the image. Please try again.",
+                                                duration: 3000, variant: "error"
+                                            })
+                                        }}/>
                         </div>
                     </div>
                 )}

@@ -54,7 +54,7 @@ export default function LoginPage() {
     return (
         <div>
             <div className="flex flex-col items-center justify-center min-h-screen pb-16">
-                <h1 className="scroll-m-10 border-b pb-4 text-3xl font-semibold tracking-tight first:mt-0 mb-12">
+                <h1 className="scroll-m-10 border-b pb-4 text-2xl font-semibold tracking-tight first:mt-0 mb-12">
                     Face authentication project
                 </h1>
                 <Card className="w-full max-w-sm">

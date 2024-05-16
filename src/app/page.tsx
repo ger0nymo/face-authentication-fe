@@ -24,13 +24,13 @@ export default function Home() {
         <div className="min-h-screen bg-background">
             {/* Top App Bar */}
             <header
-                className="sticky top-0 flex h-16 items-center justify-between gap-4 border-b bg-background px-4 md:px-6">
+                className="sticky top-0 flex h-16 items-center justify-between gap-4 border-b bg-background md:px-6">
                 <nav className="flex items-center gap-6">
                     <div className="flex items-center gap-2">
-                        <ScanFace className="h-10 w-10"/>
-                        <span className="text-xl font-semibold pl-2">
-              Face authentication project
-            </span>
+                        <ScanFace className="h-8 w-8 ml-1"/>
+                        <span className="text-lg font-semibold pl-1">
+                            Face auth
+                        </span>
                     </div>
                 </nav>
                 <div className="flex items-center gap-4">
@@ -47,9 +47,9 @@ export default function Home() {
                 </div>
             </header>
 
-            <main className="container mx-auto px-4 py-12">
+            <main className="container mx-auto py-12">
                 <div className="text-center">
-                    <h2 className="text-3xl font-semibold mb-2 px-6 text-text">
+                    <h2 className="text-2xl font-semibold mb-2 text-text">
                         Super secret content accessed. 😎
                     </h2>
                     <div className="flex justify-center py-6">
@@ -57,8 +57,8 @@ export default function Home() {
                             className="rounded-xl"
                             src={"/monke.png"}
                             alt={"Monke picture"}
-                            width={400}
-                            height={400}
+                            width={350}
+                            height={350}
                         />
                     </div>
                 </div>
