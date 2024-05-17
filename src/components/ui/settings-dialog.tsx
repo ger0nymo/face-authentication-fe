@@ -7,8 +7,7 @@ import {
     DialogDescription,
     DialogHeader,
     DialogTitle,
-    DialogTrigger,
-    DialogFooter,
+    DialogTrigger
 } from "@/components/ui/dialog";
 import {
     AlertDialog,
@@ -26,7 +25,7 @@ export default function SettingsDialog() {
     const [isFaceAuthEnabled, setIsFaceAuthEnabled] = useState(false);
     const [isAlertOpen, setIsAlertOpen] = useState(false);
     const [isCameraOpen, setIsCameraOpen] = useState(false);
-    const {toast} = useToast()
+    const {toast} = useToast();
 
     const handleFaceAuthToggle = (checked: boolean) => {
         if (checked) {

@@ -24,21 +24,26 @@ import {
 import {Input} from "@/components/ui/input";
 import {useState} from "react";
 import {Loader2} from "lucide-react";
-import {signIn} from "@/api/user.api";
+import {signUp} from "@/api/user.api";
 import Link from "next/link";
 import {useToast} from "@/components/ui/use-toast";
 const formSchema = z.object({
     email: z.string().email({message: "Invalid email address."}),
     password: z.string().min(6, {message: "Password must be at least 6 characters."}),
+    passwordAgain: z.string().min(6, {message: "Password must be at least 6 characters."}),
+}).refine((data) => data.password === data.passwordAgain, {
+    message: "Passwords don't match",
+    path: ["passwordAgain"],
 });
 
-export default function LoginPage() {
+export default function RegisterPage() {
     const router = useRouter();
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
             email: "",
             password: "",
+            passwordAgain: "",
         },
     });
     const [loading, setLoading] = useState(false);
@@ -47,21 +52,26 @@ export default function LoginPage() {
     const onSubmit = async (data: z.infer<typeof formSchema>) => {
         setLoading(true);
 
-        const result = await signIn(data.email, data.password);
+        const result = await signUp(data.email, data.password);
 
         if(!result) {
             toast({
                 title: "Error",
-                description: "An error occurred while signing in. Please make sure your email and password are correct.",
+                description: "An error occurred while signing up. Please try again later",
                 variant: "error",
                 duration: 3000
             });
             setLoading(false);
+            return;
         } else {
-            localStorage.setItem('user', JSON.stringify(result.data.user));
-            localStorage.setItem('token', result.data.token);
-            router.push('/');
+            toast({
+                title: "Success",
+                description: "Sign up successful. You can now log in with your credentials.",
+                variant: "success",
+                duration: 3000
+            });
             setLoading(false);
+            router.push("/login");
         }
     };
 
@@ -75,9 +85,9 @@ export default function LoginPage() {
                     <Form {...form}>
                         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
                             <CardHeader>
-                                <CardTitle className="text-2xl">Login</CardTitle>
+                                <CardTitle className="text-2xl">Register</CardTitle>
                                 <CardDescription>
-                                    Enter your details below to login to your account.
+
                                 </CardDescription>
                             </CardHeader>
                             <CardContent className="grid gap-6">
@@ -107,20 +117,33 @@ export default function LoginPage() {
                                         </FormItem>
                                     )}
                                 />
+                                <FormField
+                                    control={form.control}
+                                    name="passwordAgain"
+                                    render={({field}) => (
+                                        <FormItem>
+                                            <FormLabel>Password again</FormLabel>
+                                            <FormControl>
+                                                <Input type="password" placeholder="Password again" {...field} />
+                                            </FormControl>
+                                            <FormMessage/>
+                                        </FormItem>
+                                    )}
+                                />
                             </CardContent>
                             <CardFooter>
                                 <Button className="w-full" type="submit" disabled={loading}>
                                     {loading ? (
                                         <Loader2 className="mr-2 h-4 w-4 animate-spin"/>
                                     ) : (
-                                        "Sign in"
+                                        "Sign up"
                                     )}
                                 </Button>
                             </CardFooter>
                             <div className="pb-6 text-center text-sm">
-                                {"Don't have an account?"}
-                                <Link href="/register" className="underline pl-2">
-                                    Sign up
+                                {"Already have an account?"}
+                                <Link href="/login" className="underline pl-2">
+                                    Sign in
                                 </Link>
                             </div>
                         </form>
