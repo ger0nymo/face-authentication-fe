@@ -25,15 +25,23 @@ export default function Home() {
 
         const checkUser = async () => {
             if (token) {
-                const user = await getUser(token);
-                setIsLoggedIn(true);
+                const result = await getUser(token);
+
+                if (result) {
+                    localStorage.setItem('user', JSON.stringify(result.data.user));
+                    setIsLoggedIn(true);
+                } else {
+                    router.push('/login');
+                    localStorage.removeItem('user');
+                    localStorage.removeItem('token');
+                    toast({
+                        title: "Error",
+                        description: "Your token has expired. Please sign in again.",
+                        variant: "error",
+                        duration: 3000
+                    });
+                }
             } else {
-                toast({
-                    title: "Error",
-                    description: "You need to be logged in to access this page.",
-                    variant: "error",
-                    duration: 3000
-                });
                 router.push('/login');
             }
         }
@@ -88,7 +96,6 @@ export default function Home() {
                         </div>
                     </div>
                 </main>
-            )
         </div>
     ) : (
         <div className="flex justify-center items-center min-h-screen">

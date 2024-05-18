@@ -1,12 +1,13 @@
 import React, {useRef, useEffect, useState} from "react";
 import {Button} from "@/components/ui/button";
 import {Camera, Loader2, RotateCcw, SendHorizonal} from "lucide-react";
+import {imageEmbedding} from "@/api/user.api";
 
 interface CameraViewProps {
     width: number;
     height: number;
     onRegisterSuccess: () => void;
-    onRegisterFailure: () => void;
+    onRegisterFailure: (error: string) => void;
 }
 
 export default function CameraView({width, height, onRegisterSuccess, onRegisterFailure}: CameraViewProps) {
@@ -31,20 +32,26 @@ export default function CameraView({width, height, onRegisterSuccess, onRegister
     const handleSend = async () => {
         if (capturedImage) {
             setIsLoading(true);
-
-            // Simulating an asynchronous registration process
-            setTimeout(() => {
-                setIsLoading(false);
-
-                const success = true;
-
-                if (success) {
-                    onRegisterSuccess();
+            try {
+                const result = await imageEmbedding(capturedImage);
+                if(result) {
+                    if (result.status === 200) {
+                        console.log(localStorage);
+                        onRegisterSuccess();
+                    } else {
+                        console.log("Error embedding imageasdasd:", result);
+                        onRegisterFailure(result);
+                        setIsLoading(false);
+                    }
                 } else {
-                    onRegisterFailure();
-                    // Show the captured image again or perform any other actions on failure
+                    onRegisterFailure(result);
+                    setIsLoading(false);
                 }
-            }, 1500);
+            } catch (error) {
+                console.error("Error embedding image:", error);
+                onRegisterFailure("An unknown error occurred. Please try again later.");
+                setIsLoading(false);
+            }
         }
     };
 

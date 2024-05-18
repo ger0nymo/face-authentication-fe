@@ -27,6 +27,7 @@ import {Loader2} from "lucide-react";
 import {signIn} from "@/api/user.api";
 import Link from "next/link";
 import {useToast} from "@/components/ui/use-toast";
+import VerificationDialog from "@/components/ui/verification-dialog";
 const formSchema = z.object({
     email: z.string().email({message: "Invalid email address."}),
     password: z.string().min(6, {message: "Password must be at least 6 characters."}),
@@ -42,7 +43,9 @@ export default function LoginPage() {
         },
     });
     const [loading, setLoading] = useState(false);
-    const {toast} = useToast()
+    const {toast} = useToast();
+    const [verificationToken, setVerificationToken] = useState<string | null>(null);
+    const [showVerificationDialog, setShowVerificationDialog] = useState(false);
 
     const onSubmit = async (data: z.infer<typeof formSchema>) => {
         setLoading(true);
@@ -58,16 +61,29 @@ export default function LoginPage() {
             });
             setLoading(false);
         } else {
-            localStorage.setItem('user', JSON.stringify(result.data.user));
-            localStorage.setItem('token', result.data.token);
-            router.push('/');
-            setLoading(false);
+            if (result.status === 200) {
+                localStorage.setItem('user', JSON.stringify(result.data.user));
+                localStorage.setItem('token', result.data.token);
+                router.push('/');
+                setLoading(false);
+            } else if (result.status === 210) {
+                setVerificationToken(result.data.verification_token);
+                setShowVerificationDialog(true);
+            }
         }
     };
 
     return (
         <div>
             <div className="flex flex-col items-center justify-center min-h-screen pb-16">
+                <VerificationDialog
+                    open={showVerificationDialog}
+                    onOpenChange={(open: boolean) => {
+                        setShowVerificationDialog(open);
+                        if (!open) setLoading(false);
+                    }}
+                    token={verificationToken}
+                />
                 <h1 className="scroll-m-10 border-b pb-4 text-2xl font-semibold tracking-tight first:mt-0 mb-12">
                     Face authentication project
                 </h1>
