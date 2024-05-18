@@ -1,36 +1,28 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Next frontend for a face recognition based authentication system
+
+I created this as part of a college project laboratory project. The project is a face recognition based authentication system.
+
+This app is the frontend for the project. It is capable of handling user authentication, user registration, through communication with the projects [face recognition API](https://github.com/ger0nymo/face-authentication-be)
+
+The app utilizes **[Next.js](https://nextjs.org/)** and **[shadcn/ui](https://ui.shadcn.com/)**.
 
 ## Getting Started
 
-First, run the development server:
-
+1. Install the dependencies
 ```bash
-npm run dev
-# or
+yarn install
+```
+2. Run the development server
+```bash
 yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Usage
+Users can register and login to the app. 
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+Users can switch between dark/light theme and can enable/disable face recognition authentication.
 
-## Learn More
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+If they have face recognition enabled, they will be prompted to authenticate using their face, starting from the very next login.
