@@ -24,5 +24,6 @@ Users can register and login to the app.
 
 Users can switch between dark/light theme and can enable/disable face recognition authentication.
 
+In order to enable face recognition authentication, they will be prompted to take a photo of their face that can be registered in the database as an embedding vector.
 
 If they have face recognition enabled, they will be prompted to authenticate using their face, starting from the very next login.
